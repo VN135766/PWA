@@ -1,14 +1,16 @@
-
 const APP_PREFIX = 'my-site-cache-';  
 const VERSION = 'v1';
 const CACHE_NAME = APP_PREFIX + VERSION;
 const DATA_CACHE_NAME = "data-cache-" + VERSION;
+
 
 const FILES_TO_CACHE = [
   "/",
   "./index.html",
   "./css/styles.css",
   "./manifest.json",
+  "./js/idb.js",
+  "./js/index.js",
   "./icons/icon-72x72.png",
   "./icons/icon-96x96.png",
   "./icons/icon-128x128.png",
@@ -19,6 +21,7 @@ const FILES_TO_CACHE = [
   "./icons/icon-512x512.png"
 ];
 
+
 self.addEventListener("install", function(event) {
   event.waitUntil(
     caches.open(CACHE_NAME).then(function(cache) {
@@ -27,6 +30,7 @@ self.addEventListener("install", function(event) {
     })
   );
 });
+
 
 self.addEventListener("fetch", function(event) {
   // cache all get requests to /api routes
@@ -52,6 +56,7 @@ self.addEventListener("fetch", function(event) {
     return;
   }
 
+
   event.respondWith(
     fetch(event.request).catch(function() {
       return caches.match(event.request).then(function(response) {
@@ -65,6 +70,7 @@ self.addEventListener("fetch", function(event) {
     })
   );
 });
+
 
 self.addEventListener('activate', function (e) {
   e.waitUntil(
