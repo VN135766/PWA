@@ -11,7 +11,7 @@ const database = "budget "
 const objectStore = "transactions"
 
 
-const request = indexedDB.open(database, 1);
+const request = indexedDB.open(database, 2);
 
 
 request.onupgradeneeded = ({ target }) => {
