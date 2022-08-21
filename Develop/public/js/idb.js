@@ -1,4 +1,3 @@
-
 const indexedDB =
   window.indexedDB ||
   window.mozIndexedDB ||
@@ -8,11 +7,12 @@ const indexedDB =
 
 let db;
 
+const database = "budget "
+const objectStore = "transactions"
 
-const database = "your-variable-name-here"
-const objectStore = "your-variable-name-here"
 
 const request = indexedDB.open(database, 1);
+
 
 request.onupgradeneeded = ({ target }) => {
   let db = target.result;
@@ -28,24 +28,28 @@ request.onsuccess = ({ target }) => {
   }
 };
 
+
 request.onerror = function(event) {
   console.log("Woops! " + event.target.errorCode);
 };
 
+
 function saveRecord(record) {
-  const transaction = db.transaction(["OBJECT_STORE"], "readwrite");
-  const store = transaction.objectStore("OBJECT_STORE");
+  const transaction = db.transaction(["transactions"], "readwrite");
+  const store = transaction.objectStore("transactions");
   store.add(record);
 }
 
+
 function checkDatabase() {
-  const transaction = db.transaction(["OBJECT_STORE"], "readwrite");
-  const store = transaction.objectStore("OBJECT_STORE");
+  const transaction = db.transaction(["transactions"], "readwrite");
+  const store = transaction.objectStore("transactions");
   const getAll = store.getAll();
 
   getAll.onsuccess = function() {
     if (getAll.result.length > 0) {
-      fetch("INSERT_UPDATE_ROUTE_NAME_HERE", {
+
+      fetch("/api/transaction/bulk", {
         method: "POST",
         body: JSON.stringify(getAll.result),
         headers: {
